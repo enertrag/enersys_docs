@@ -146,92 +146,139 @@ _No Enersys-specific parameters are currently defined for buses._
 
 ## Enersys-specific parameter examples
 
+(marker)=
 ### marker
+
+Defines the plotting symbol used when visualising network components, allowing custom markers on maps and diagrams.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", marker="s")
 ```
 
+(invest_cost)=
 ### invest_cost
+
+Specifies the specific investment costs (CAPEX) per unit of nominal power. These costs are used in optimisation to value new capacity.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
 ```
 
+(fo_cost)=
 ### fo_cost
+
+Defines the specific fixed operating costs (OPEX) per unit of nominal power and year, representing annual operation and maintenance expenses.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", fo_cost=5000)
 ```
 
+(invest_cost_scale)=
 ### invest_cost_scale
+
+Provides a size-dependent investment cost curve. Keys denote capacity breakpoints and values give the corresponding specific investment costs, enabling modelling of economies of scale.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={100: 900000})
 ```
 
+(p_sum_min)=
 ### p_sum_min
+
+Enforces a minimum cumulative active power production over the entire simulation horizon.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_min=10)
 ```
 
+(p_sum_max)=
 ### p_sum_max
+
+Sets a maximum limit on the cumulative active power production over the whole simulation period.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_max=100)
 ```
 
+(p_sum_annual_min)=
 ### p_sum_annual_min
+
+Requires a minimum amount of active power to be produced in each modelled year.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_annual_min=500)
 ```
 
+(p_sum_annual_max)=
 ### p_sum_annual_max
+
+Restricts the annual active power production to not exceed a specified value in each year.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_annual_max=1000)
 ```
 
+(cf_min)=
 ### cf_min
+
+Defines a lower bound on the average capacity factor over the modelling horizon.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", cf_min=0.2)
 ```
 
+(cf_max)=
 ### cf_max
+
+Specifies an upper bound on the average capacity factor across the simulation period.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", cf_max=0.8)
 ```
 
+(standby_load)=
 ### standby_load
+
+Represents standby consumption as a fraction of nominal power, modelling electricity use while the component is idle.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", standby_load={"p": 0.05})
 ```
 
+(x)=
 ### x
+
+Stores the x‑coordinate (for example, longitude) of a component for plotting and geographical analyses.
 
 ```python
 network.add("Load", "example_load", bus="bus0", x=10)
 ```
 
+(y)=
 ### y
+
+Stores the y‑coordinate (for example, latitude) of a component for plotting and geographical analyses.
 
 ```python
 network.add("Load", "example_load", bus="bus0", y=50)
 ```
 
+(balancing)=
 ### balancing
+
+Defines the period over which flows on a link must balance (such as year, month, week or hour) to model multi-period constraints.
 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", balancing="year")
 ```
 
+(ref_output_bus1)=
 ### ref_output_bus1
+
+When set to ``True``, sizes and costs the link based on power at the output bus instead of the input bus, useful for asymmetric efficiencies.
 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", ref_output_bus1=True)
 ```
+
+
