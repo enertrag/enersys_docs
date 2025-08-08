@@ -44,17 +44,17 @@ _No Enersys-specific parameters are currently defined for buses._
 | type | string | | "" | Technology type | PyPSA |
 | x | float | degrees | NaN | X-position (longitude) | PyPSA |
 | y | float | degrees | NaN | Y-position (latitude) | PyPSA |
-| marker | string | | "o" | Optional plotting symbol | Enersys |
-| invest_cost | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
-| fo_cost | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
-| invest_cost_scale | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
-| p_sum_min | float | MWh | NaN | Minimum cumulative active power output | Enersys |
-| p_sum_max | float | MWh | NaN | Maximum cumulative active power output | Enersys |
-| p_sum_annual_min | float | MWh | NaN | Minimum annual active power output | Enersys |
-| p_sum_annual_max | float | MWh | NaN | Maximum annual active power output | Enersys |
-| cf_min | float | p.u. | NaN | Minimum average capacity factor | Enersys |
-| cf_max | float | p.u. | NaN | Maximum average capacity factor | Enersys |
-| standby_load | dict | | False | Standby load as fraction of p_nom | Enersys |
+| [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
+| [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
+| [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
+| [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
+| [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
+| [p_sum_annual_max](#p_sum_annual_max) | float | MWh | NaN | Maximum annual active power output | Enersys |
+| [cf_min](#cf_min) | float | p.u. | NaN | Minimum average capacity factor | Enersys |
+| [cf_max](#cf_max) | float | p.u. | NaN | Maximum average capacity factor | Enersys |
+| [standby_load](#standby_load) | dict | | False | Standby load as fraction of p_nom | Enersys |
 
 ## Load
 
@@ -66,9 +66,9 @@ _No Enersys-specific parameters are currently defined for buses._
 | carrier | string | | "" | Carrier of the load | PyPSA |
 | sign | int | | -1 | Sign convention | PyPSA |
 | type | string | | "" | Technology type | PyPSA |
-| x | float | degrees | NaN | X-position (longitude) | Enersys |
-| y | float | degrees | NaN | Y-position (latitude) | Enersys |
-| marker | string | | "o" | Optional plotting symbol | Enersys |
+| [x](#x) | float | degrees | NaN | X-position (longitude) | Enersys |
+| [y](#y) | float | degrees | NaN | Y-position (latitude) | Enersys |
+| [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
 
 ## Link
 
@@ -89,21 +89,21 @@ _No Enersys-specific parameters are currently defined for buses._
 | length | float | km | 0 | Physical length of the link | PyPSA |
 | carrier | string | | "" | Carrier of the link | PyPSA |
 | type | string | | "" | Technology type | PyPSA |
-| x | float | degrees | NaN | X-position (longitude) | Enersys |
-| y | float | degrees | NaN | Y-position (latitude) | Enersys |
-| marker | string | | "o" | Optional plotting symbol | Enersys |
-| invest_cost | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
-| fo_cost | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
-| invest_cost_scale | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
-| p_sum_min | float | MWh | NaN | Minimum cumulative active power output | Enersys |
-| p_sum_max | float | MWh | NaN | Maximum cumulative active power output | Enersys |
-| p_sum_annual_min | float | MWh | NaN | Minimum annual active power output | Enersys |
-| p_sum_annual_max | float | MWh | NaN | Maximum annual active power output | Enersys |
-| cf_min | float | p.u. | NaN | Minimum average capacity factor | Enersys |
-| cf_max | float | p.u. | NaN | Maximum average capacity factor | Enersys |
-| balancing | string | | "" | Period over which flows must balance (year, month, day, week, hour) | Enersys |
-| ref_output_bus1 | bool | | False | Use output bus power for sizing and costs | Enersys |
-| standby_load | dict | | False | Standby load as fraction of p_nom | Enersys |
+| [x](#x) | float | degrees | NaN | X-position (longitude) | Enersys |
+| [y](#y) | float | degrees | NaN | Y-position (latitude) | Enersys |
+| [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
+| [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
+| [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
+| [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
+| [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
+| [p_sum_annual_max](#p_sum_annual_max) | float | MWh | NaN | Maximum annual active power output | Enersys |
+| [cf_min](#cf_min) | float | p.u. | NaN | Minimum average capacity factor | Enersys |
+| [cf_max](#cf_max) | float | p.u. | NaN | Maximum average capacity factor | Enersys |
+| [balancing](#balancing) | string | | "" | Period over which flows must balance (year, month, day, week, hour) | Enersys |
+| [ref_output_bus1](#ref_output_bus1) | bool | | False | Use output bus power for sizing and costs | Enersys |
+| [standby_load](#standby_load) | dict | | False | Standby load as fraction of p_nom | Enersys |
 
 ## StorageUnit
 
@@ -129,17 +129,109 @@ _No Enersys-specific parameters are currently defined for buses._
 | build_year | int | year | 0 | First year available | PyPSA |
 | lifetime | float | years | inf | Economic lifetime | PyPSA |
 | carrier | string | | "" | Carrier of the unit | PyPSA |
-| x | float | degrees | NaN | X-position (longitude) | Enersys |
-| y | float | degrees | NaN | Y-position (latitude) | Enersys |
-| marker | string | | "o" | Optional plotting symbol | Enersys |
-| invest_cost | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
-| fo_cost | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
-| invest_cost_scale | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
-| p_sum_min | float | MWh | NaN | Minimum cumulative active power output | Enersys |
-| p_sum_max | float | MWh | NaN | Maximum cumulative active power output | Enersys |
-| p_sum_annual_min | float | MWh | NaN | Minimum annual active power output | Enersys |
-| p_sum_annual_max | float | MWh | NaN | Maximum annual active power output | Enersys |
-| cf_min | float | p.u. | NaN | Minimum average capacity factor | Enersys |
-| cf_max | float | p.u. | NaN | Maximum average capacity factor | Enersys |
-| standby_load | dict | | False | Standby load as fraction of p_nom | Enersys |
+| [x](#x) | float | degrees | NaN | X-position (longitude) | Enersys |
+| [y](#y) | float | degrees | NaN | Y-position (latitude) | Enersys |
+| [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
+| [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
+| [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
+| [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
+| [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
+| [p_sum_annual_max](#p_sum_annual_max) | float | MWh | NaN | Maximum annual active power output | Enersys |
+| [cf_min](#cf_min) | float | p.u. | NaN | Minimum average capacity factor | Enersys |
+| [cf_max](#cf_max) | float | p.u. | NaN | Maximum average capacity factor | Enersys |
+| [standby_load](#standby_load) | dict | | False | Standby load as fraction of p_nom | Enersys |
 
+
+## Enersys-specific parameter examples
+
+### marker
+
+```python
+network.add("Generator", "example_gen", bus="bus0", marker="s")
+```
+
+### invest_cost
+
+```python
+network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
+```
+
+### fo_cost
+
+```python
+network.add("Generator", "example_gen", bus="bus0", fo_cost=5000)
+```
+
+### invest_cost_scale
+
+```python
+network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={100: 900000})
+```
+
+### p_sum_min
+
+```python
+network.add("Generator", "example_gen", bus="bus0", p_sum_min=10)
+```
+
+### p_sum_max
+
+```python
+network.add("Generator", "example_gen", bus="bus0", p_sum_max=100)
+```
+
+### p_sum_annual_min
+
+```python
+network.add("Generator", "example_gen", bus="bus0", p_sum_annual_min=500)
+```
+
+### p_sum_annual_max
+
+```python
+network.add("Generator", "example_gen", bus="bus0", p_sum_annual_max=1000)
+```
+
+### cf_min
+
+```python
+network.add("Generator", "example_gen", bus="bus0", cf_min=0.2)
+```
+
+### cf_max
+
+```python
+network.add("Generator", "example_gen", bus="bus0", cf_max=0.8)
+```
+
+### standby_load
+
+```python
+network.add("Generator", "example_gen", bus="bus0", standby_load={"p": 0.05})
+```
+
+### x
+
+```python
+network.add("Load", "example_load", bus="bus0", x=10)
+```
+
+### y
+
+```python
+network.add("Load", "example_load", bus="bus0", y=50)
+```
+
+### balancing
+
+```python
+network.add("Link", "example_link", bus0="b0", bus1="b1", balancing="year")
+```
+
+### ref_output_bus1
+
+```python
+network.add("Link", "example_link", bus0="b0", bus1="b1", ref_output_bus1=True)
+```
