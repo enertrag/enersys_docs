@@ -110,6 +110,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | Parameter | Type | Unit | Default | Description | Source |
 |-----------|------|------|---------|-------------|--------|
 | bus | string | | | Connected bus | PyPSA |
+| [bus](#bus) | list | | | multi-bus connection | enersys |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
@@ -145,6 +146,17 @@ _No Enersys-specific parameters are currently defined for buses._
 
 
 ## Enersys-specific parameter examples
+
+(bus)=
+### bus
+
+Multi-bus option for storage units will connect one storage to multiple buses. Energy charged on one bus can only be
+discharged to the same bus. Internally, one storage unit is created for each bus, multiple buses will appear in the 
+output files.
+
+```python
+network.add("StorageUnit", "storage_multibus", bus=["b_electricity_green", "b_electricity_grey", ...)
+```
 
 (marker)=
 ### marker
@@ -280,5 +292,3 @@ When set to ``True``, sizes and costs the link based on power at the output bus 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", ref_output_bus1=True)
 ```
-
-
