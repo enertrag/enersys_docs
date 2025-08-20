@@ -200,7 +200,7 @@ Provides a size-dependent investment cost curve. The parameter is a dictionary, 
 the lower capacity boundary of a cost interval, and the value are the specific costs of that interval. 
 
 E.g. the parameter dictionary `invest_cost_scale={0: 200, 10: 150, 30: 100}` means that the costs for the first interval 
-0 - 10 MW are 200 EUR/MW. Then for the second interval 10 - 30 MW the costs are 150 EUR/MW. And for every MW installed  
+0 - 10 MW are 200 EUR/MW. Then for the second interval 10 - 30 MW the costs are 150 EUR/MW. And for every MW installed 
 above 30 MW the costs are 100 EUR/MW. 
 
 In this example if e.g. a component of size 50 MW would be build, the actual specific costs would be 
