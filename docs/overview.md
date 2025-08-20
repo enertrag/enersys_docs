@@ -16,10 +16,23 @@ When beginning a new analysis, copy the provided `project_template` folder into 
 
 ## Managing scenarios
 
-Running many model variants manually can be tedious. The `Scenarios` helper automates this process by varying parameters and executing the model for each combination. Provide a function that assembles, optimizes, and returns a `Network` for a given set of parameters.
+Running many model variants manually can be tedious. The `Scenarios` helper automates this process by varying parameters 
+and executing the model for each combination. Provide a function that assembles, optimizes, and returns a `Network` for 
+a given set of parameters.
+
+Parmameters can be divided into groups. Same groups are varied together. For different group permutations are created. 
+E.g. the parameters p1 = Parameter(values=[50, 100], group=1), p2 = Parameter(values=[8, 9], group=1) and 
+p3 = Parameter(values=[1000, 2000], group=2), the following four permutations would be evaluated: 
+
+| Scenario | p1  | p2 | p3   |
+|----------|-----|----|------|
+| 1        | 50  | 8  | 1000 |
+| 2        | 50  | 8  | 2000 |
+| 3        | 100 | 9  | 1000 |
+| 4        | 100 | 9  | 2000 |
 
 ```python
-from enersys.scenarios import Scenarios
+from enersys.scenarios import Scenarios, Parameter
 
 def scenario(co2_price, demand):
     # assemble a PyPSA network, solve it and return the result
@@ -27,7 +40,9 @@ def scenario(co2_price, demand):
     network.optimize()
     return network
 
-s = Scenarios(scenario, co2_price=[50, 100], demand=[1.0, 1.2])
+param_co2_price = Parameter(values=[50, 100], group=1)
+param_demand = Param(values=[1.0, 1.2], group=2)
+s = Scenarios(scenario, co2_price=param_co2_price, demand=param_demand)
 s.run(n_parallel=2)
 ```
 
@@ -85,4 +100,3 @@ PyPSA focuses on generic power system modelling. Enersys builds on this foundati
 - See the [components](components.md) page for additional component parameters.
 - The repository README covers installation and contribution guidelines.
 - The `examples` directory contains small demonstration scripts.
-
