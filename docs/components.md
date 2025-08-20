@@ -48,6 +48,8 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
+| [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
 | [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
 | [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
@@ -95,6 +97,8 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
+| [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
 | [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
 | [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
@@ -136,6 +140,8 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
+| [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
 | [p_sum_max](#p_sum_max) | float | MWh | NaN | Maximum cumulative active power output | Enersys |
 | [p_sum_annual_min](#p_sum_annual_min) | float | MWh | NaN | Minimum annual active power output | Enersys |
@@ -170,7 +176,8 @@ network.add("Generator", "example_gen", bus="bus0", marker="s")
 (invest_cost)=
 ### invest_cost
 
-Specifies the specific investment costs (CAPEX) per unit of nominal power. These costs are used in optimisation to value new capacity.
+Specifies the specific investment costs (CAPEX) per unit of nominal power. These costs are used in optimisation to value 
+new capacity [EUR/MW].
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
@@ -179,7 +186,8 @@ network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
 (fo_cost)=
 ### fo_cost
 
-Defines the specific fixed operating costs (OPEX) per unit of nominal power and year, representing annual operation and maintenance expenses.
+Defines the specific fixed operating costs (OPEX) per unit of nominal power and year, representing annual operation and 
+maintenance expenses [EUR/(MW*a)].
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", fo_cost=5000)
@@ -188,16 +196,46 @@ network.add("Generator", "example_gen", bus="bus0", fo_cost=5000)
 (invest_cost_scale)=
 ### invest_cost_scale
 
-Provides a size-dependent investment cost curve. Keys denote capacity breakpoints and values give the corresponding specific investment costs, enabling modelling of economies of scale.
+Provides a size-dependent investment cost curve. The parameter is a dictionary, where the keys are 
+the lower capacity boundary of a cost interval, and the value are the specific costs of that interval. 
+
+E.g. the parameter dictionary `invest_cost_scale={0: 200, 10: 150, 30: 100}` means that the costs for the first interval 
+0 - 10 MW are 200 EUR/MW. Then for the second interval 10 - 30 MW the costs are 150 EUR/MW. And for every MW installed  
+above 30 MW the costs are 100 EUR/MW. 
+
+In this example if e.g. a component of size 50 MW would be build, the actual specific costs would be 
+for interval 1 the full 10 MW at 200 EUR/MW -> 2000 EUR, for interval 2 the full 20 MW at  150 EUR/MW -> 3000 EUR and 
+then for the last interval 20 MW at 100 EUR/MW -> 2000 EUR. 
+
+This results in (2000 EUR + 3000 EUR + 2000 EUR) / 50 MW --> 140 EUR/MW 
 
 ```python
-network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={100: 900000})
+network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={0: 200, 10: 150, 30: 100})
+```
+
+(capex_system_share)=
+### capex_system_share
+
+Adds a fraction of `invest_cost` as system costs for this component (e.g. 0.2 -> 20 % of invest cost as EUR).
+
+```python
+network.add("Generator", "example_gen", bus="bus0", capex_system_share=0.2)
+```
+
+(opex_system_share)=
+### opex_system_share
+
+Specifies the fraction of `invest_cost` that will be attributed as system OPEX for this component (e.g. 0.02 -> 2 %
+of invest cost as EUR/a)
+
+```python
+network.add("Generator", "example_gen", bus="bus0", opex_system_share=0.02)
 ```
 
 (p_sum_min)=
 ### p_sum_min
 
-Enforces a minimum cumulative active power production over the entire simulation horizon.
+Enforces a minimum cumulative energy production over the entire simulation horizon.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_min=10)
@@ -206,7 +244,7 @@ network.add("Generator", "example_gen", bus="bus0", p_sum_min=10)
 (p_sum_max)=
 ### p_sum_max
 
-Sets a maximum limit on the cumulative active power production over the whole simulation period.
+Sets a maximum limit on the cumulative energy production over the whole simulation period.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_max=100)
@@ -215,7 +253,7 @@ network.add("Generator", "example_gen", bus="bus0", p_sum_max=100)
 (p_sum_annual_min)=
 ### p_sum_annual_min
 
-Requires a minimum amount of active power to be produced in each modelled year.
+Requires a minimum amount of annual energy to be produced.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_annual_min=500)
@@ -224,7 +262,7 @@ network.add("Generator", "example_gen", bus="bus0", p_sum_annual_min=500)
 (p_sum_annual_max)=
 ### p_sum_annual_max
 
-Restricts the annual active power production to not exceed a specified value in each year.
+Restricts the annual energy production to not exceed a specified value.
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", p_sum_annual_max=1000)
@@ -251,10 +289,10 @@ network.add("Generator", "example_gen", bus="bus0", cf_max=0.8)
 (standby_load)=
 ### standby_load
 
-Represents standby consumption as a fraction of nominal power, modelling electricity use while the component is idle.
+Represents a constant standby consumption as a fraction of nominal power-
 
 ```python
-network.add("Generator", "example_gen", bus="bus0", standby_load={"p": 0.05})
+network.add("Generator", "example_gen", bus="bus0", standby_load={"bus_electricity": 0.05})
 ```
 
 (x)=
@@ -278,7 +316,8 @@ network.add("Load", "example_load", bus="bus0", y=50)
 (balancing)=
 ### balancing
 
-Defines the period over which flows on a link must balance (such as year, month, week or hour) to model multi-period constraints.
+Defines the period over which inflows and outflows on a link must balance (such as year, month, week or hour) to model 
+multi-period constraints.
 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", balancing="year")
@@ -287,7 +326,7 @@ network.add("Link", "example_link", bus0="b0", bus1="b1", balancing="year")
 (ref_output_bus1)=
 ### ref_output_bus1
 
-When set to ``True``, sizes and costs the link based on power at the output bus instead of the input bus, useful for asymmetric efficiencies.
+When set to ``True``, sizes and costs are based on power at the output bus instead of the input bus
 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", ref_output_bus1=True)
