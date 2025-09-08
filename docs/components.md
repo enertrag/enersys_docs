@@ -30,6 +30,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | bus | string | | | Connected bus | PyPSA |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
+| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_set | float | MW | 0 | Dispatch power | PyPSA |
@@ -80,6 +81,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | bus1 | string | | | Output bus | PyPSA |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
+| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | PyPSA |
@@ -117,6 +119,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | [bus](#bus) | list | | | multi-bus connection | enersys |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
+| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | PyPSA |

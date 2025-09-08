@@ -16,9 +16,24 @@ When beginning a new analysis, copy the provided `project_template` folder into 
 
 ## Managing scenarios
 
-Running many model variants manually can be tedious. The `Scenarios` helper automates this process by varying parameters 
-and executing the model for each combination. Provide a function that assembles, optimizes, and returns a `Network` for 
-a given set of parameters.
+Running many model variants manually can be tedious. The `Scenarios` helper
+automates this process by varying parameters and executing the model for each
+combination. Provide a function that assembles and returns a `Network` for a
+given set of parameters. If the returned network has not been solved yet,
+`Scenarios` will call `network.optimize()` automatically.
+
+Two optional hooks allow further customisation:
+
+- `modify_network` is executed **before** optimisation and only if the
+  scenario function returned an unsolved network. It can be either a callable
+  that tweaks the network or a `Network` instance. When a `Network` instance is
+  supplied, the new `Network.modify_by_network` method is used to apply the
+  component capacities from that network to the scenario network.
+- `post_optimize` runs **after** optimisation and can trigger post-processing
+  steps such as `Network.create_txt`.
+
+Both hooks may optionally include any subset of the scenario parameters in
+their function signature, but they do not have to.
 
 Parmameters can be divided into groups. Same groups are varied together. For different group permutations are created. 
 E.g. the parameters p1 = Parameter(values=[50, 100], group=1), p2 = Parameter(values=[8, 9], group=1) and 
@@ -35,18 +50,50 @@ p3 = Parameter(values=[1000, 2000], group=2), the following four permutations wo
 from enersys.scenarios import Scenarios, Parameter
 
 def scenario(co2_price, demand):
-    # assemble a PyPSA network, solve it and return the result
+    # assemble a PyPSA network and return it unsolved
     network = ...
-    network.optimize()
+    return network
+
+def post_optimize(network, co2_price):
+    network.create_txt("result")
+
+def modify_network(network, demand):
+    # optional pre-optimisation adjustments
     return network
 
 param_co2_price = Parameter(values=[50, 100], group=1)
-param_demand = Param(values=[1.0, 1.2], group=2)
-s = Scenarios(scenario, co2_price=param_co2_price, demand=param_demand)
+param_demand = Parameter(values=[1.0, 1.2], group=2)
+
+s = Scenarios(
+    scenario,
+    post_optimize=post_optimize,
+    modify_network=modify_network,  # or pass an optimised Network instance
+    co2_price=param_co2_price,
+    demand=param_demand,
+)
 s.run(n_parallel=2)
 ```
 
-Each parameter combination is solved and stored, allowing straightforward comparison of results.
+Each parameter combination is solved and stored, allowing straightforward
+comparison of results.
+
+### Modifying networks
+
+The `Network` class offers `modify_by_network` to freeze the capacities from one
+network onto another. This is particularly useful together with the
+`modify_network` hook:
+
+```python
+n_ref = Network(...)
+n_ref.optimize()
+
+n_scenario = Network(...)
+n_scenario.modify_by_network(n_ref)
+```
+
+Components that should remain expandable can set the new
+`p_nom_must_extend` parameter. It behaves like `p_nom_extendable` but prevents
+`modify_by_network` from fixing the capacity when another network is applied.
 
 ## Working with time series
 
