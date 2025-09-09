@@ -77,6 +77,25 @@ s.run(n_parallel=2)
 Each parameter combination is solved and stored, allowing straightforward
 comparison of results.
 
+### Saving and reusing results
+
+`Scenarios` can persist the outcome of a run for later inspection. Calling
+`store_results_to_folder("path")` writes a `results.csv` with the evaluated
+parameters and, if the result objects are networks, corresponding NetCDF
+files. An existing `Scenarios` instance may later populate itself with these
+values via `load_results_from_folder("path")`.
+
+To rebuild a `Scenarios` object from disk there are two class methods:
+
+- `Scenarios.restore_results_from_folder(folder, scenario)` creates the
+  instance and loads the stored results directly.
+- `Scenarios.create_from_results_folder(folder, scenario)` only restores the
+  parameters. Because the parameters originate from `results.csv`, group
+  information is lost and the already permuted values are provided as plain
+  lists. If parameters need adjustment afterwards they can be overwritten with
+  either a scalar, e.g. `s.parameter["param"] = 1`, or with a list matching the
+  number of scenarios to compute.
+
 ### Modifying networks
 
 The `Network` class offers `modify_by_network` to freeze the capacities from one
