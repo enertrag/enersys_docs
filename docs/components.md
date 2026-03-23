@@ -21,7 +21,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | x | float | degrees | NaN | X-position (longitude) | PyPSA |
 | y | float | degrees | NaN | Y-position (latitude) | PyPSA |
 
-_No Enersys-specific parameters are currently defined for buses._
+| [color](#color) | string | | "" | Optional bus colour for visualisation (e.g. Sankey plots) | Enersys |
 
 ## Generator
 
@@ -49,6 +49,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
 | [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
 | [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
@@ -57,6 +58,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | [p_sum_annual_max](#p_sum_annual_max) | float | MWh | NaN | Maximum annual active power output | Enersys |
 | [cf_min](#cf_min) | float | p.u. | NaN | Minimum average capacity factor | Enersys |
 | [cf_max](#cf_max) | float | p.u. | NaN | Maximum average capacity factor | Enersys |
+| [balancing](#balancing) | string | | "" | Period over which output must balance (year, month, day, week, hour) | Enersys |
 | [standby_load](#standby_load) | dict | | False | Standby load as fraction of p_nom | Enersys |
 
 ## Load
@@ -99,6 +101,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
 | [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
 | [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
@@ -143,6 +146,7 @@ _No Enersys-specific parameters are currently defined for buses._
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
+| [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
 | [capex_system_share](#capex_system_share) | float | p.u. | NaN | Share of system CAPEX attributed to this component | Enersys |
 | [opex_system_share](#opex_system_share) | float | p.u. | NaN | Share of system OPEX attributed to this component | Enersys |
 | [p_sum_min](#p_sum_min) | float | MWh | NaN | Minimum cumulative active power output | Enersys |
@@ -165,6 +169,15 @@ output files.
 
 ```python
 network.add("StorageUnit", "storage_multibus", bus=["b_electricity_green", "b_electricity_grey", ...)
+```
+
+(color)=
+### color
+
+Defines an optional colour for buses that is used by visualisation tools such as Sankey plots.
+
+```python
+network.add("Bus", "example_bus", color="#4477AA")
 ```
 
 (marker)=
@@ -214,6 +227,16 @@ This results in (2000 EUR + 3000 EUR + 2000 EUR) / 50 MW --> 140 EUR/MW
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={0: 200, 10: 150, 30: 100})
+```
+
+(discount_rate)=
+### discount_rate
+
+Sets a component-specific discount rate. If set, this value overrides the network-wide `discount_rate` for CAPEX/OPEX
+annuity calculations of that component.
+
+```python
+network.add("Generator", "example_gen", bus="bus0", discount_rate=0.06)
 ```
 
 (capex_system_share)=
