@@ -366,10 +366,6 @@ This means:
 - Cost and sizing-related parameters that are tied to link power (e.g. ``p_nom``, ``p_nom_extendable``,
   ``capital_cost``, ``marginal_cost``) are then evaluated on the transformed orientation, which is exactly why they
   effectively reference the original ``bus1`` side when ``ref_output_bus1=True``.
-- ``standby_load`` is interpreted with your original bus names: for
-  ``network.add(..., bus0=\"electricity\", bus1=\"hydrogen\", standby_load={\"electricity\": x, \"hydrogen\": y})``,
-  the internal standby generators are attached to ``electricity`` and ``hydrogen`` exactly as written in the
-  ``standby_load`` dictionary.
 - Because ``standby_load`` is defined as a share of link ``p_nom``, and ``p_nom`` is referenced to the original
   ``bus1`` side when ``ref_output_bus1=True``, the absolute standby-load magnitude is also effectively scaled from
   original ``bus1``-referenced capacity.
