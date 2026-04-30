@@ -352,7 +352,30 @@ network.add("Link", "example_link", bus0="b0", bus1="b1", balancing="year")
 (ref_output_bus1)=
 ### ref_output_bus1
 
-When set to ``True``, sizes and costs are based on power at the output bus instead of the input bus
+When set to ``True``, Enersys internally rewrites the link so that sizing and costs reference the original ``bus1``
+power instead of the original ``bus0`` power.
+
+This means:
+
+- ``bus0`` and ``bus1`` are swapped internally.
+- ``p_min_pu`` and ``p_max_pu`` are swapped and sign-inverted.
+- Main efficiency ``efficiency`` is inverted (``1 / efficiency``), so the physical conversion relation stays
+  consistent after swapping.
+- Additional outputs (``bus2``, ``bus3``, ...) are converted to efficiencies relative to the new reference
+  (``-efficiencyN / efficiency``).
+- Cost and sizing-related parameters that are tied to link power (e.g. ``p_nom``, ``p_nom_extendable``,
+  ``capital_cost``, ``marginal_cost``) are then evaluated on the transformed orientation, which is exactly why they
+  effectively reference the original ``bus1`` side when ``ref_output_bus1=True``.
+- ``standby_load`` is interpreted with your original bus names: for
+  ``network.add(..., bus0=\"electricity\", bus1=\"hydrogen\", standby_load={\"electricity\": x, \"hydrogen\": y})``,
+  the internal standby generators are attached to ``electricity`` and ``hydrogen`` exactly as written in the
+  ``standby_load`` dictionary.
+- Because ``standby_load`` is defined as a share of link ``p_nom``, and ``p_nom`` is referenced to the original
+  ``bus1`` side when ``ref_output_bus1=True``, the absolute standby-load magnitude is also effectively scaled from
+  original ``bus1``-referenced capacity.
+
+As a result, optimized ``p_nom`` and link costs follow the original output side (``bus1``), while conversion
+constraints remain physically equivalent.
 
 ```python
 network.add("Link", "example_link", bus0="b0", bus1="b1", ref_output_bus1=True)
