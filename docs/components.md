@@ -155,6 +155,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | [p_sum_annual_max](#p_sum_annual_max) | float | MWh | NaN | Maximum annual active power output | Enersys |
 | [cf_min](#cf_min) | float | p.u. | NaN | Minimum average capacity factor | Enersys |
 | [cf_max](#cf_max) | float | p.u. | NaN | Maximum average capacity factor | Enersys |
+| [share_usable_capacity](#share_usable_capacity) | float/series | p.u. | NaN | Share of storage energy capacity that may be used | Enersys |
 | [standby_load](#standby_load) | dict | | False | Standby load as fraction of p_nom | Enersys |
 
 
@@ -310,6 +311,36 @@ Specifies an upper bound on the average capacity factor across the simulation pe
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", cf_max=0.8)
+```
+
+
+(share_usable_capacity)=
+### share_usable_capacity
+
+Limits the usable energy capacity of a `StorageUnit` without changing its charge or discharge power capacity. The limit
+is applied to the state of charge as a share of `p_nom * max_hours`; for example, `0.5` means only half of the
+storage energy capacity can be filled. Values must be between 0 and 1.
+
+The parameter can be set as a static value or as a time series to model availability changes over time.
+
+```python
+network.add(
+    "StorageUnit",
+    "battery",
+    bus="bus0",
+    p_nom=10,
+    max_hours=4,
+    share_usable_capacity=0.8,
+)
+
+network.add(
+    "StorageUnit",
+    "seasonal_storage",
+    bus="bus0",
+    p_nom=10,
+    max_hours=100,
+    share_usable_capacity=pd.Series([0.5, 0.6, 0.8], index=network.snapshots[:3]),
+)
 ```
 
 (standby_load)=
