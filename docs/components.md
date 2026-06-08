@@ -30,7 +30,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | bus | string | | | Connected bus | PyPSA |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
-| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
+| [p_nom_must_extend](#p_nom_must_extend) | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_set | float | MW | 0 | Dispatch power | PyPSA |
@@ -47,6 +47,8 @@ This section lists the available components in Enersys. Each table shows the sta
 | y | float | degrees | NaN | Y-position (latitude) | PyPSA |
 | [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fixed_invest_cost](#fixed_invest_cost) | float | EUR | NaN | One-time fixed investment costs included in optimisation | Enersys |
+| [fixed_invest_cost_post_opt](#fixed_invest_cost_post_opt) | float | EUR | NaN | One-time fixed investment costs added only during post-processing | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
 | [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
@@ -83,7 +85,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | bus1 | string | | | Output bus | PyPSA |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
-| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
+| [p_nom_must_extend](#p_nom_must_extend) | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | PyPSA |
@@ -99,6 +101,8 @@ This section lists the available components in Enersys. Each table shows the sta
 | [y](#y) | float | degrees | NaN | Y-position (latitude) | Enersys |
 | [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fixed_invest_cost](#fixed_invest_cost) | float | EUR | NaN | One-time fixed investment costs included in optimisation | Enersys |
+| [fixed_invest_cost_post_opt](#fixed_invest_cost_post_opt) | float | EUR | NaN | One-time fixed investment costs added only during post-processing | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
 | [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
@@ -122,7 +126,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | [bus](#bus) | list | | | multi-bus connection | enersys |
 | p_nom | float | MW | 0 | Nominal power | PyPSA |
 | p_nom_extendable | bool | | False | Allow capacity expansion | PyPSA |
-| p_nom_must_extend | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
+| [p_nom_must_extend](#p_nom_must_extend) | bool | | False | Like p_nom_extendable but prevents capacity fixing by `modify_by_network` | Enersys |
 | p_nom_min | float | MW | 0 | Minimum expandable capacity | PyPSA |
 | p_nom_max | float | MW | inf | Maximum expandable capacity | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | PyPSA |
@@ -144,6 +148,8 @@ This section lists the available components in Enersys. Each table shows the sta
 | [y](#y) | float | degrees | NaN | Y-position (latitude) | Enersys |
 | [marker](#marker) | string | | "o" | Optional plotting symbol | Enersys |
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | Enersys |
+| [fixed_invest_cost](#fixed_invest_cost) | float | EUR | NaN | One-time fixed investment costs included in optimisation | Enersys |
+| [fixed_invest_cost_post_opt](#fixed_invest_cost_post_opt) | float | EUR | NaN | One-time fixed investment costs added only during post-processing | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | Enersys |
 | [invest_cost_scale](#invest_cost_scale) | dict | EUR/MW | NaN | Size-dependent investment cost curves | Enersys |
 | [discount_rate](#discount_rate) | float | p.u. | NaN | Component-specific discount rate overriding network setting | Enersys |
@@ -165,7 +171,7 @@ This section lists the available components in Enersys. Each table shows the sta
 ### bus
 
 Multi-bus option for storage units will connect one storage to multiple buses. Energy charged on one bus can only be
-discharged to the same bus. Internally, one storage unit is created for each bus, multiple buses will appear in the 
+discharged to the same bus. Internally, one storage unit is created for each bus, multiple buses will appear in the
 output files.
 
 ```python
@@ -190,20 +196,81 @@ Defines the plotting symbol used when visualising network components, allowing c
 network.add("Generator", "example_gen", bus="bus0", marker="s")
 ```
 
+(p_nom_must_extend)=
+### p_nom_must_extend
+
+Keeps a component expandable even when a reference network is later applied with `Network.modify_by_network`. Use it for
+capacities that must remain optimisation variables in follow-up scenarios. It is available on `Generator`, `Link`, and
+`StorageUnit` components.
+
+```python
+network.add(
+    "Generator",
+    "wind park",
+    bus="bus0",
+    p_nom_extendable=True,
+    p_nom_must_extend=True,
+)
+```
+
 (invest_cost)=
 ### invest_cost
 
-Specifies the specific investment costs (CAPEX) per unit of nominal power. These costs are used in optimisation to value 
+Specifies the specific investment costs (CAPEX) per unit of nominal power. These costs are used in optimisation to value
 new capacity [EUR/MW].
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
 ```
 
+(fixed_invest_cost)=
+### fixed_invest_cost
+
+Specifies a one-time fixed investment cost in EUR for a component. Unlike `invest_cost`, this cost is independent of the
+chosen capacity size and applies when the installed capacity is greater than zero. For extendable components, Enersys adds
+the corresponding optimisation constraint so the fixed CAPEX is only charged when the component is built. For fixed
+non-extendable components with `p_nom > 0`, the cost is converted into the component's annualized `capital_cost`.
+
+`discount_rate` and `lifetime` must be available either on the network or on the component so Enersys can annualize the
+fixed amount.
+
+```python
+network.add(
+    "Generator",
+    "backup boiler",
+    bus="heat bus",
+    p_nom_extendable=True,
+    p_nom_max=20,
+    fixed_invest_cost=100_000,
+    lifetime=20,
+    discount_rate=0.06,
+)
+```
+
+(fixed_invest_cost_post_opt)=
+### fixed_invest_cost_post_opt
+
+Adds a one-time fixed investment cost in EUR only after the optimisation has finished. This is useful for reporting costs
+that should appear in CAPEX and OPEX outputs but should not influence the investment or dispatch decision. The cost is
+applied during post-processing when the optimized capacity is greater than zero and also requires `discount_rate` and
+`lifetime` for annualization.
+
+```python
+network.add(
+    "Generator",
+    "optional reporting item",
+    bus="bus0",
+    p_nom_extendable=True,
+    fixed_invest_cost_post_opt=50_000,
+    lifetime=20,
+    discount_rate=0.06,
+)
+```
+
 (fo_cost)=
 ### fo_cost
 
-Defines the specific fixed operating costs (OPEX) per unit of nominal power and year, representing annual operation and 
+Defines the specific fixed operating costs (OPEX) per unit of nominal power and year, representing annual operation and
 maintenance expenses [EUR/(MW*a)].
 
 ```python
@@ -213,18 +280,18 @@ network.add("Generator", "example_gen", bus="bus0", fo_cost=5000)
 (invest_cost_scale)=
 ### invest_cost_scale
 
-Provides a size-dependent investment cost curve. The parameter is a dictionary, where the keys are 
-the lower capacity boundary of a cost interval, and the value are the specific costs of that interval. 
+Provides a size-dependent investment cost curve. The parameter is a dictionary, where the keys are
+the lower capacity boundary of a cost interval, and the value are the specific costs of that interval.
 
-E.g. the parameter dictionary `invest_cost_scale={0: 200, 10: 150, 30: 100}` means that the costs for the first interval 
-0 - 10 MW are 200 EUR/MW. Then for the second interval 10 - 30 MW the costs are 150 EUR/MW. And for every MW installed 
-above 30 MW the costs are 100 EUR/MW. 
+E.g. the parameter dictionary `invest_cost_scale={0: 200, 10: 150, 30: 100}` means that the costs for the first interval
+0 - 10 MW are 200 EUR/MW. Then for the second interval 10 - 30 MW the costs are 150 EUR/MW. And for every MW installed
+above 30 MW the costs are 100 EUR/MW.
 
-In this example if e.g. a component of size 50 MW would be build, the actual specific costs would be 
-for interval 1 the full 10 MW at 200 EUR/MW -> 2000 EUR, for interval 2 the full 20 MW at  150 EUR/MW -> 3000 EUR and 
-then for the last interval 20 MW at 100 EUR/MW -> 2000 EUR. 
+In this example if e.g. a component of size 50 MW would be build, the actual specific costs would be
+for interval 1 the full 10 MW at 200 EUR/MW -> 2000 EUR, for interval 2 the full 20 MW at  150 EUR/MW -> 3000 EUR and
+then for the last interval 20 MW at 100 EUR/MW -> 2000 EUR.
 
-This results in (2000 EUR + 3000 EUR + 2000 EUR) / 50 MW --> 140 EUR/MW 
+This results in (2000 EUR + 3000 EUR + 2000 EUR) / 50 MW --> 140 EUR/MW
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost_scale={0: 200, 10: 150, 30: 100})
@@ -373,7 +440,7 @@ network.add("Load", "example_load", bus="bus0", y=50)
 (balancing)=
 ### balancing
 
-Defines the period over which inflows and outflows on a link must balance (such as year, month, week or hour) to model 
+Defines the period over which inflows and outflows on a link must balance (such as year, month, week or hour) to model
 multi-period constraints.
 
 ```python
