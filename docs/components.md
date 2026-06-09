@@ -152,7 +152,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | p_nom_max | float | MW | inf | Maximum expandable capacity | No | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | No | PyPSA |
 | p_max_pu | float | p.u. | inf | Maximum dispatch per unit | No | PyPSA |
-| max_hours | float | h | inf | Storage capacity relative to power | No | PyPSA |
+| max_hours | float | h | 1 | Storage capacity relative to power | No | PyPSA |
 | efficiency_store | float | p.u. | 1 | Charging efficiency | No | PyPSA |
 | efficiency_dispatch | float | p.u. | 1 | Discharging efficiency | No | PyPSA |
 | standing_loss | float | p.u./h | 0 | Hourly standing loss | No | PyPSA |
