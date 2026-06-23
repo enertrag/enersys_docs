@@ -256,14 +256,86 @@ hourly or 15-minute values are needed and aligns the returned series to the
 requested index.
 
 ```python
-from enersys.data.electricity_price import get_aurora_ts, AuroraPriceLevel
+from enersys.data.electricity_price import (
+    AuroraPriceLevel,
+    get_aurora_annual_ts,
+    get_aurora_capture_prices,
+    get_aurora_technology_annual_ts,
+    get_aurora_ts,
+)
 
 prices = get_aurora_ts(year=2030, price_level=AuroraPriceLevel.central)
 prices_15min = get_aurora_ts(
     snapshots=network.snapshots,
     price_level=AuroraPriceLevel.low,
 )
+annual_prices = get_aurora_annual_ts(
+    year=range(2030, 2035),
+    metrics=["baseload_price", "gas_price", "carbon_price", "total_emissions"],
+    price_level=AuroraPriceLevel.central,
+)
+capture_prices = get_aurora_capture_prices(
+    year=[2030, 2035],
+    technologies=["fixed_solar_pv", "onshore wind"],
+    price_level=AuroraPriceLevel.central,
+)
+technology_data = get_aurora_technology_annual_ts(
+    year=2030,
+    technologies="Solar",
+    metrics=["capacity", "generation", "uncurtailed_capture_price"],
+)
 ```
+
+Annual Aurora system forecast data can be loaded with `get_aurora_annual_ts`.
+Common annual metrics include `baseload_price`, `gas_price`, `carbon_price`, and
+`total_emissions`. Pass `metrics` as a string or list of metric names to select
+columns; metric matching is case-insensitive and ignores the unit suffix in the
+Aurora CSV, so both spaces and underscores are accepted. A single year and
+single metric returns a float, one selected dimension returns a `Series`, and
+multiple years plus multiple metrics return a `DataFrame`.
+
+Annual Aurora technology forecast data can be loaded with
+`get_aurora_capture_prices` for the common capture-price case, or with
+`get_aurora_technology_annual_ts` when other technology metrics are needed.
+Both helpers read the Aurora `technology-1y` CSV. `technologies` can be a single
+technology or a list, and can match either the Aurora `Group` or `Subgroup`
+column, so values such as `Solar`, `fixed_solar_pv`, and `Onshore wind` are
+accepted. By default, `get_aurora_capture_prices` returns the uncurtailed
+capture price; pass `curtailed_below_zero=True` to select the capture price
+curtailed below zero instead.
+
+Available Aurora technology groups include:
+
+- `Battery storage`
+- `Coal`
+- `DSR`
+- `Gas / oil peaker`
+- `Gas CCGT`
+- `Gas CCS`
+- `Hydro`
+- `Hydrogen CCGT`
+- `Hydrogen peaker`
+- `Interconnectors`
+- `Lignite`
+- `Nuclear`
+- `Offshore wind`
+- `Onshore wind`
+- `Other RES`
+- `Other thermal`
+- `Pumped storage`
+- `Solar`
+
+Capture-price columns may be empty for some groups in Aurora's source data.
+Use `metrics="uncurtailed_capture_price"` or
+`metrics="capture_price_curtailed_below_zero"` with
+`get_aurora_technology_annual_ts` to select a specific capture-price field.
+
+Other available annual metrics include: wholesale market price 5th percentile,
+10th percentile, 50th percentile, 90th percentile, 95th percentile, wholesale
+market price standard deviation, coal price, clean dark spread, clean spark
+spread, data centre demand, EV demand, electric heat demand, electrolyser
+demand, total demand, peak inflexible demand, and total emissions with negative
+emissions.
 
 ### Multi-year helper indexes
 
