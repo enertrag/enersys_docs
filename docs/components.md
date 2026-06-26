@@ -152,7 +152,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | p_nom_max | float | MW | inf | Maximum expandable capacity | No | PyPSA |
 | p_min_pu | float | p.u. | -inf | Minimum dispatch per unit | No | PyPSA |
 | p_max_pu | float | p.u. | inf | Maximum dispatch per unit | No | PyPSA |
-| max_hours | float | h | 1 | Storage capacity relative to power | No | PyPSA |
+| max_hours | float | h | 1 | Maximum state of charge capacity in terms of hours at full output power capacity `p_nom` | No | PyPSA |
 | efficiency_store | float | p.u. | 1 | Charging efficiency | No | PyPSA |
 | efficiency_dispatch | float | p.u. | 1 | Discharging efficiency | No | PyPSA |
 | standing_loss | float | p.u./h | 0 | Hourly standing loss | No | PyPSA |
@@ -169,6 +169,7 @@ This section lists the available components in Enersys. Each table shows the sta
 | [y](#y) | float | degrees | NaN | Y-position (latitude) | No | Enersys |
 | [marker](#marker) | string |  | "o" | Optional plotting symbol | No | Enersys |
 | [invest_cost](#invest_cost) | float | EUR/MW | NaN | Specific investment costs (CAPEX) | No | Enersys |
+| [invest_cost_per_capacity](#invest_cost_per_capacity) | float | EUR/MWh | NaN | StorageUnit-specific investment costs per energy capacity | No | Enersys |
 | [fixed_invest_cost](#fixed_invest_cost) | float | EUR | NaN | One-time fixed investment costs included in optimisation | Yes, for optional extendable components | Enersys |
 | [fixed_invest_cost_post_opt](#fixed_invest_cost_post_opt) | float | EUR | NaN | One-time fixed investment costs added only during post-processing | No | Enersys |
 | [fo_cost](#fo_cost) | float | EUR/(MW·a) | NaN | Specific fixed operating costs (OPEX) | No | Enersys |
@@ -242,6 +243,26 @@ new capacity [EUR/MW].
 
 ```python
 network.add("Generator", "example_gen", bus="bus0", invest_cost=750000)
+```
+
+
+(invest_cost_per_capacity)=
+### invest_cost_per_capacity
+
+Specifies storage energy-capacity investment costs for `StorageUnit` components in EUR/MWh. The optimisation adds the
+annualised cost based on `p_nom * max_hours`, and the output reports these costs separately as `CAPEX storage capacity`
+instead of mixing them into the normal `CAPEX` rows from `invest_cost`.
+
+```python
+network.add(
+    "StorageUnit",
+    "example battery",
+    bus="bus0",
+    p_nom_extendable=True,
+    max_hours=4,
+    invest_cost=100_000,
+    invest_cost_per_capacity=50_000,
+)
 ```
 
 (fixed_invest_cost)=
